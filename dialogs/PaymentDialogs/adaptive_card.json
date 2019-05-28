@@ -1,0 +1,123 @@
+{
+    "type": "AdaptiveCard",
+    "body": [
+        {
+            "type": "TextBlock",
+            "size": "Large",
+            "weight": "Bolder",
+            "text": "訂單明細"
+        },
+        {
+            "type": "Container",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "size": "Medium",
+                    "weight": "Bolder",
+                    "text": "商品資訊:"
+                },
+                {
+                    "type": "FactSet",
+                    "facts": [
+                        {
+                            "title": "商品名稱:",
+                            "value": "userInfo.p.product_name"
+                        },
+                        {
+                            "title": "方案:",
+                            "value": "userInfo.p_plan"
+                        },
+                        {
+                            "title": "規格:",
+                            "value": "p_format"
+                        },
+                        {
+                            "title": "金額:",
+                            "value": "$ + userInfo.p_price"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Container",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "size": "Medium",
+                    "weight": "Bolder",
+                    "text": "收件人資訊:"
+                },
+                {
+                    "type": "FactSet",
+                    "facts": [
+                        {
+                            "title": "姓名:",
+                            "value": "userInfo.c_name"
+                        },
+                        {
+                            "title": "電話:",
+                            "value": "userInfo.c_phone"
+                        },
+                        {
+                            "title": "信箱:",
+                            "value": "userInfo.c_email"
+                        }
+                    ]
+                },
+                {
+                    "type": "Container",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "size": "Medium",
+                            "weight": "Bolder",
+                            "text": "購買人資訊:"
+                        },
+                        {
+                            "type": "FactSet",
+                            "facts": [
+                                {
+                                    "title": "姓名:",
+                                    "value": "userInfo.b_name"
+                                },
+                                {
+                                    "title": "電話:",
+                                    "value": "userInfo.b_phone"
+                                },
+                                {
+                                    "title": "信箱:",
+                                    "value": "userInfo.b_email"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Container",
+            "items": [
+                {
+                    "type": "FactSet",
+                    "facts": [
+                        {
+                            "title": "取貨方式:",
+                            "value": "userInfo.p_shipway"
+                        },
+                        {
+                            "title": "取貨地址:",
+                            "value": "p_shipway_addr"
+                        },
+                        {
+                            "title": "付款方式:",
+                            "value": "userInfo.p_paymentway"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.0"
+}

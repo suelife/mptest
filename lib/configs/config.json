@@ -1,0 +1,8 @@
+{
+    "host":"mp-devl.mysql.database.azure.com",
+    "user":"user@mp-devl",
+    "password":"Kc2zv9EXCYFxLK1evjqISRgidMrrTfPV",
+    "database_base":"bearshop_base",
+    "database_member":"bearshop_member",
+    "port":3306
+}
