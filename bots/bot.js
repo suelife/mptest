@@ -57,9 +57,12 @@ class MpBot extends ActivityHandler {
 
     }
     addConversationReference(activity) {
-        var conversationReference = {}
-        conversationReference = TurnContext.getConversationReference(activity);
+        console.log("-----------------------------------------------------------------")
+        const conversationReference = TurnContext.getConversationReference(activity);
+        // console.log("conversationReference : ", conversationReference)
         this.conversationReferences[conversationReference.conversation.id] = conversationReference;
+        console.log("this.conversationReferences : ", this.conversationReferences)
+        console.log("-----------------------------------------------------------------")
     }
 }
 

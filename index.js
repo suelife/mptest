@@ -41,9 +41,9 @@ adapter.onTurnError = async (context, error) => {
 };
 
 // Create the Storage.
+const conversationReferences = {};
 let conversationState, userState
 const memoryStorage = new MemoryStorage()
-const conversationReferences = {};
 conversationState = new ConversationState(memoryStorage)
 userState = new UserState(memoryStorage)
 
@@ -73,21 +73,35 @@ server.post('/api/notify', async (req, res) => {
     console.log("========================================================================")
 
     var parsedUrl = url.parse(req.url, true);
-    // console.log("parsedUrl : ", parsedUrl)
     var from = parsedUrl.query.from;
+    console.log("from : ", from)
     var to = parsedUrl.query.to;
+    console.log("to : ", to)
     var conversationId = parsedUrl.query.conversationId;
+    console.log("conversationId : ", conversationId)
+    var id = parsedUrl.query.id;
     // JSON.parse(Object.values(userState.storage.memory)[1]).userinfoproperty.p_shipway_2_1 = req.body
     
     for (let conversationReference of Object.values(conversationReferences)) {
+        console.log("conversationReference :", conversationReference)
         if (conversationReference.conversation.id == conversationId) {
             conversationReference.data = req.body
-            // console.log("conversationReference :", conversationReference)
+            // console.log("conversationReference.data :", conversationReference.data)
             await adapter.continueConversation(conversationReference, async turnContext => {
-                const reply = MessageFactory.text('請隨意輸入，讓機器人醒來');
-                reply.from = { id: to };
-                reply.recipient = { id: from };
-                await turnContext.sendActivity(reply);
+                var store = conversationReference.data.storename + " " + conversationReference.data.storeaddress
+                const reply1 = MessageFactory.text('您選擇的門市資訊如下');
+                const reply2 = MessageFactory.text(store);
+                const chk = MessageFactory.suggestedActions(["是", "否"], "請問是否正確")
+                reply1.from = { id: to };
+                reply1.recipient = { id: from };
+                reply2.from = { id: to };
+                reply2.recipient = { id: from };
+                chk.from = { id: to };
+                chk.recipient = { id: from };
+                await turnContext.sendActivity(reply1);
+                await turnContext.sendActivity(reply2);
+                await turnContext.sendActivity(chk);
+
             });
         }
     }
@@ -100,8 +114,15 @@ server.get('/api/to7-11', async (req, res) => {
     var from = JSON.parse(Object.values(userState.storage.memory)[1]).userinfoproperty.u_from
     var to = JSON.parse(Object.values(userState.storage.memory)[1]).userinfoproperty.u_to
     var conversationId = JSON.parse(Object.values(userState.storage.memory)[1]).userinfoproperty.u_cid
+    console.log("------------get--------------")
+    // console.log("JSON.parse(Object.values(userState.storage.memory)[1]) : ", JSON.parse(Object.values(userState.storage.memory)[1]))
+    console.log("Object.values(userState.storage.memory) : ", Object.values(userState.storage.memory))
+    console.log("from: ", from)
+    console.log("to: ", to)
+    console.log("conversationId: ", conversationId)
+    console.log("------------get--------------")
     var endpoint = "http://localhost:3978/api/notify"
-    var notifyUrl = endpoint + "?from=" + from + "&to=" + to + "&conversationId=" + conversationId
+    var notifyUrl = endpoint + "?from=" + from + "&to=" + to + "&conversationId=" + conversationId + "&id=50"
     var formdata
     var formdata1 = '<html><body><form name="form1" action="http://emap.shopping7.com.tw/emap/c2cemap.ashx" method="POST">\
                     <div>\

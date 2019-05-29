@@ -27,8 +27,6 @@ class ConfirmPaymentDialog extends ComponentDialog {
     async ConfirmPaymentStep0(stepContext) {
         console.log("ConfirmPaymentStep0")
         const userInfo = await this.userProfileAccessor.get(stepContext.context)
-        const app = express();
-        var server
         let success = undefined
         await postToSunTech.post(userInfo).then(function (value) {
             if (value != "POST失敗") {
@@ -36,9 +34,8 @@ class ConfirmPaymentDialog extends ComponentDialog {
             }
         })
         if (success) {
-            userInfo.sun = success
-            console.log(JSON.parse(userInfo.sun))
-            await stepContext.context.sendActivity(`顯示: ${JSON.parse(userInfo.sun).data}`)
+            // userInfo.sun = success
+            await stepContext.context.sendActivity(`post MP回傳結果 : ${success}`)
             await stepContext.context.sendActivities([
                 { type: 'typing' },
                 { type: 'delay', value: 1000 }
@@ -55,31 +52,26 @@ class ConfirmPaymentDialog extends ComponentDialog {
     async ConfirmPaymentStep1(stepContext) {
         console.log("ConfirmPaymentStep1")
         const userInfo = await this.userProfileAccessor.get(stepContext.context)
-        // console.log("userInfo.u_to : ", userInfo.u_to)
-        // console.log("userInfo.u_from : ", userInfo.u_from)
-        // console.log("userInfo.u_cid : ", userInfo.u_cid)
-        await stepContext.context.sendActivity("點擊按鈕，您將前往付款畫面。")
-        var gosuntechCard = CardFactory.adaptiveCard({
-            "type": "AdaptiveCard",
-            "actions": [
-                {
-                    "type": "Action.OpenUrl",
-                    "title": "前往付款畫面",
-                    "url": "http://localhost:3978/api/tosuntech"
-                }
-            ],
-            "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-            "version": "1.0"
-        })
-        await stepContext.context.sendActivity({ attachments: [gosuntechCard] })
+        console.log("userInfo.u_to : ", userInfo.u_to)
+        console.log("userInfo.u_from : ", userInfo.u_from)
+        console.log("userInfo.u_cid : ", userInfo.u_cid)
+        // await stepContext.context.sendActivity("點擊按鈕，您將前往付款畫面。")
+        // var gosuntechCard = CardFactory.adaptiveCard({
+        //     "type": "AdaptiveCard",
+        //     "actions": [
+        //         {
+        //             "type": "Action.OpenUrl",
+        //             "title": "前往付款畫面",
+        //             "url": "http://localhost:3978/api/tosuntech"
+        //         }
+        //     ],
+        //     "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+        //     "version": "1.0"
+        // })
+        // await stepContext.context.sendActivity({ attachments: [gosuntechCard] })
+        // await stepContext.context.sendActivity(`顯示2: ${JSON.parse(userInfo.sun).data}`)
         return await stepContext.endDialog()
     }
-
-    // async ConfirmPaymentStep1(stepContext) {
-    //     console.log("ConfirmPaymentStep1")
-    //     const userInfo = await this.userProfileAccessor.get(stepContext.context)
-    //     return await stepContext.endDialog()
-    // }
 }
 
 module.exports.ConfirmPaymentDialog = ConfirmPaymentDialog

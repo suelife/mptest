@@ -54,13 +54,23 @@ class SevenElevenDeliveryDialog extends ComponentDialog {
             await stepContext.context.sendActivity("不選門市還想取貨阿")
             return await stepContext.beginDialog(SEVENELEVENDELIVERY_PROMPT)
         } else {
-            if (userInfo.p_shipway_2_1 === undefined && this.conversationReferences[userInfo.u_cid].data) {
-                userInfo.p_shipway_2_1 = this.conversationReferences[userInfo.u_cid].data
-                console.log("userInfo.p_shipway_2_1 :", userInfo.p_shipway_2_1)
-                userInfo.p_shipway_2_2 = userInfo.p_shipway_2_1.storeid
-                userInfo.p_shipway_2_3 = userInfo.p_shipway_2_1.storename
-                userInfo.p_shipway_2_4 = userInfo.p_shipway_2_1.storeaddress
-                return await stepContext.endDialog()
+            console.log("請問是否正確 :", stepContext.result)
+            if (stepContext.result == "是") {
+                if (userInfo.p_shipway_2_1 === undefined && this.conversationReferences[userInfo.u_cid].data) {
+                    userInfo.p_shipway_2_1 = this.conversationReferences[userInfo.u_cid].data
+                    console.log("userInfo.p_shipway_2_1 :", userInfo.p_shipway_2_1)
+                    userInfo.p_shipway_2_2 = userInfo.p_shipway_2_1.storeid
+                    userInfo.p_shipway_2_3 = userInfo.p_shipway_2_1.storename
+                    userInfo.p_shipway_2_4 = userInfo.p_shipway_2_1.storeaddress
+                    return await stepContext.endDialog()
+                }
+            } else if (stepContext.result == "否") {
+                await stepContext.context.sendActivity("請重新選擇門市")
+                return await stepContext.beginDialog(SEVENELEVENDELIVERY_PROMPT)
+            } else {
+                await stepContext.context.sendActivity("不想確認就當你選錯")
+                await stepContext.context.sendActivity("請重新選擇門市")
+                return await stepContext.beginDialog(SEVENELEVENDELIVERY_PROMPT)
             }
         }
     }
