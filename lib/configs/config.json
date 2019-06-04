@@ -1,6 +1,6 @@
 {
-    "host":"mp-devl.mysql.database.azure.com",
-    "user":"user@mp-devl",
+    "host":"mp-release.mysql.database.azure.com",
+    "user":"user@mp-release",
     "password":"Kc2zv9EXCYFxLK1evjqISRgidMrrTfPV",
     "database_base":"bearshop_base",
     "database_member":"bearshop_member",

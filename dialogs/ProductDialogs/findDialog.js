@@ -1,4 +1,4 @@
-const { ComponentDialog, DialogSet, DialogTurnStatus, WaterfallDialog, TextPrompt, NumberPrompt} = require('botbuilder-dialogs');
+const { ComponentDialog, DialogSet, DialogTurnStatus, WaterfallDialog, TextPrompt, NumberPrompt } = require('botbuilder-dialogs');
 const { CardFactory, MessageFactory } = require('botbuilder');
 const ProductInfo = require('../../lib/productInfo')
 const StoreInfo = require('../../lib/storeInfo')
@@ -28,12 +28,14 @@ class FindDialog extends ComponentDialog {
         let p_i_d
         let mid
         await stepContext.context.sendActivity("好的，正在幫您搜尋此商品...");
-            await stepContext.context.sendActivities([
-                { type: 'typing' },
-                { type: 'delay', value: 1000 }
+        await stepContext.context.sendActivities([
+            { type: 'typing' },
+            { type: 'delay', value: 1000 }
         ]);
 
-        await ProductInfo.p(pid).then(function(value){
+        console.log("p start")
+        await ProductInfo.p(pid).then(function (value) {
+            console.log("p end")
             if (value) {
                 userInfo.p = value
                 mid = value.mid
@@ -48,7 +50,9 @@ class FindDialog extends ComponentDialog {
             }
         })
 
-        await ProductInfo.p_d(pid).then(function(value){
+        console.log("p_d start")
+        await ProductInfo.p_d(pid).then(function (value) {
+            console.log("p_d end")
             if (Object.keys(value).length === 0) {
                 userInfo.p_detail = null
             } else {
@@ -60,7 +64,9 @@ class FindDialog extends ComponentDialog {
             userInfo.p_img = null
             return await stepContext.endDialog()
         } else {
-            await ProductInfo.b_i(p_i_d).then(function(value){
+            console.log("b_i start")
+            await ProductInfo.b_i(p_i_d).then(function (value) {
+                console.log("b_i end")
                 if (Object.keys(value).length === 0) {
                     userInfo.p_img = null
                 } else {
@@ -69,7 +75,9 @@ class FindDialog extends ComponentDialog {
             })
         }
 
-        await StoreInfo.m(mid).then(function(value){
+        console.log("m start")
+        await StoreInfo.m(mid).then(function (value) {
+            console.log("m end")
             userInfo.m = value
         })
         return await stepContext.endDialog()
