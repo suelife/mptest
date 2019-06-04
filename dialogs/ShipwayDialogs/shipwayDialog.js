@@ -31,7 +31,7 @@ class ShipwayDialog extends ComponentDialog {
     async ShipwayStep0(stepContext) {
         console.log("ShipwayStep0")
         const userInfo = await this.userProfileAccessor.get(stepContext.context)
-        const shipWay = MessageFactory.suggestedActions(["宅配", "7-11取貨", "全家"], `選擇取貨方式`);
+        const shipWay = MessageFactory.suggestedActions(["宅配", "7-11", "全家"], `選擇取貨方式`);
         if (!userInfo.p_shipway) {
             return await stepContext.prompt(TEXT_PROMPT, shipWay)
         } else {

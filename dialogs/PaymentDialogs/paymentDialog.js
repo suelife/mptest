@@ -30,7 +30,10 @@ class PaymentDialog extends ComponentDialog {
         console.log("PaymentStep0")
         const userInfo = await this.userProfileAccessor.get(stepContext.context)
 
-        const payfix = MessageFactory.suggestedActions(["確定付款", "修改訂單內容"], "請選擇確定付款或修改訂單內容")
+        if (userInfo.p_shipway != "宅配") {
+            await stepContext.context.sendActivity("門市將在'確認付款'後，做選擇")
+        }
+        const payfix = MessageFactory.suggestedActions(["確認付款", "修改訂單內容"], "請選擇確認付款或修改訂單內容")
         if (!userInfo.o) {
             return await stepContext.prompt(TEXT_PROMPT, payfix)
         } else {

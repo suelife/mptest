@@ -126,7 +126,7 @@ async function logMessageText(storage, conversationData, userProfile, turnContex
             }
         }
         else {
-            await turnContext.sendActivity(`Creating and saving new utterance log`);
+            // await turnContext.sendActivity(`Creating and saving new utterance log`);
             var turnNumber = 1;
             storeItems[conversationId] = { userId: [`${userId}`], botId: [`${botId}`], UtteranceList: [`${utterance}`], "eTag": "*", turnNumber }
 

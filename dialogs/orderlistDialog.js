@@ -152,10 +152,6 @@ class OrderlistDialog extends ComponentDialog {
                                     "value": userInfo.p_shipway
                                 },
                                 {
-                                    "title": "取貨地址:",
-                                    "value": p_shipway_addr
-                                },
-                                {
                                     "title": "付款方式:",
                                     "value": userInfo.p_paymentway
                                 }
