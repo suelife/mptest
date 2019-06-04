@@ -159,8 +159,9 @@ server.use(restify.plugins.bodyParser({ mapParams: true }));
 // });
 
 server.get('/api/tosuntech', async (req, res) => {
-    console.log("userState.storage.memory : ", JSON.parse(Object.values(userState.storage.memory)[1]))
+    // console.log("userState.storage.memory : ", JSON.parse(Object.values(userState.storage.memory)[1]) = {})
     var suntech = JSON.parse(Object.values(userState.storage.memory)[1]).userinfoproperty.sun
+    JSON.parse(Object.values(userState.storage.memory)[1]) = {}
     console.log("suntech : ", suntech)
     res.header('Content-Length');
     res.charSet('utf-8');

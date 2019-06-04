@@ -63,7 +63,7 @@ class ConfirmPaymentDialog extends ComponentDialog {
                 {
                     "type": "Action.OpenUrl",
                     "title": "前往付款畫面",
-                    "url": "http://localhost:3978/api/tosuntech"
+                    "url": "https://mpbot9527.azurewebsites.net/api/tosuntech"
                 }
             ],
             "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
@@ -72,6 +72,8 @@ class ConfirmPaymentDialog extends ComponentDialog {
         await stepContext.context.sendActivity({ attachments: [gosuntechCard] })
         // await stepContext.context.sendActivity(`顯示2: ${JSON.parse(userInfo.sun).data}`)
         return await stepContext.endDialog()
+        // https://mpbot9527.azurewebsites.net
+        // http://localhost:3978
     }
 }
 
