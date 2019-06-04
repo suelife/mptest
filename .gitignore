@@ -1,6 +1,6 @@
 node_modules/
 *.js.map
-.env
+
 要撈的資料庫.txt
 MP流程圖(一頁式網頁&機器人).html
 WebChat.html
