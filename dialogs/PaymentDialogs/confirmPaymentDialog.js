@@ -63,7 +63,7 @@ class ConfirmPaymentDialog extends ComponentDialog {
                 {
                     "type": "Action.OpenUrl",
                     "title": "前往付款畫面",
-                    "url": "http://localhost:3978/api/tosuntech"
+                    "url": "https://mpbot9527.azurewebsites.net/api/tosuntech"
                 }
             ],
             "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
