@@ -31,7 +31,7 @@ class ShipwayDialog extends ComponentDialog {
     async ShipwayStep0(stepContext) {
         console.log("ShipwayStep0")
         const userInfo = await this.userProfileAccessor.get(stepContext.context)
-        const shipWay = MessageFactory.suggestedActions(["宅配", "7-11取貨"], `選擇取貨方式`);
+        const shipWay = MessageFactory.suggestedActions(["宅配", "7-11取貨", "全家"], `選擇取貨方式`);
         if (!userInfo.p_shipway) {
             return await stepContext.prompt(TEXT_PROMPT, shipWay)
         } else {
@@ -47,14 +47,19 @@ class ShipwayDialog extends ComponentDialog {
         }
         switch (userInfo.p_shipway) {
             case "宅配":
+                userInfo.p_shipway_2_1 = 0
                 return await stepContext.beginDialog(HOMEDELIVERY_PROMPT)
-            case "7-11取貨":
-                return await stepContext.beginDialog(SEVENELEVENDELIVERY_PROMPT)
-                // userInfo.p_shipway = "宅配"
+            case "7-11":
+                userInfo.p_shipway_2_1 = 1
+                return await stepContext.endDialog()
+                // return await stepContext.beginDialog(SEVENELEVENDELIVERY_PROMPT)
                 // await stepContext.context.sendActivity("非常抱歉，還在排除問題中")
                 // await stepContext.context.sendActivity("會盡快修復")
                 // await stepContext.context.sendActivity("將導向宅配服務")
                 // return await stepContext.beginDialog(HOMEDELIVERY_PROMPT)
+            case "全家":
+                userInfo.p_shipway_2_1 = 2
+                return await stepContext.endDialog()
             default:
                 await stepContext.context.sendActivity("麻煩用選的，謝謝。")
                 await stepContext.context.sendActivity("不然你別想完成交易 凸")

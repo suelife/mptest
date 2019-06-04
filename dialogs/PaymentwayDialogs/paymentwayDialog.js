@@ -2,12 +2,14 @@ const { ComponentDialog, DialogSet, DialogTurnStatus, WaterfallDialog, TextPromp
 const { CardFactory, MessageFactory } = require('botbuilder');
 const { HomeDeliveryPaymentWayDialog } = require("./homeDeliveryPaymentWayDialog")
 const { SevenElevenDeliveryPaymentWayDialog } = require("./sevenElevenDeliveryPaymentWayDialog")
+const { HomeFamilyDeliveryPaymentWayDialog } = require("./homeFamilyDeliveryPaymentWayDialog")
 
 const MAIN_PROMPT = "mainPrompt"
 const TEXT_PROMPT = 'textPrompt'
 const PAYMENTWAY_PROMPT = "paymentwayPrompt"
 const HOMEDELIVERYPAYMENTWAY_PROMPT = "homedeliverypaymentwayPrompt"
 const SEVENELEVENDELIVERYPAYMENTWAY_PROMPT = "sevenelevendeliverypaymentwayPrompt"
+const HOMEFAMILYDELIVERYPAYMENTWAY_PROMPT = "homefamilydeliverypaymentwayPrompt"
 
 class PaymentwayDialog extends ComponentDialog {
     constructor(id, userProfileAccessor) {
@@ -18,6 +20,7 @@ class PaymentwayDialog extends ComponentDialog {
         this.addDialog(new TextPrompt(TEXT_PROMPT))
             .addDialog(new HomeDeliveryPaymentWayDialog(HOMEDELIVERYPAYMENTWAY_PROMPT, this.userProfileAccessor))
             .addDialog(new SevenElevenDeliveryPaymentWayDialog(SEVENELEVENDELIVERYPAYMENTWAY_PROMPT, this.userProfileAccessor))
+            .addDialog(new HomeFamilyDeliveryPaymentWayDialog(HOMEFAMILYDELIVERYPAYMENTWAY_PROMPT, this.userProfileAccessor))
             .addDialog(new WaterfallDialog(MAIN_PROMPT, [
                 this.PaymentWayStep0.bind(this),
             ]))
@@ -31,8 +34,10 @@ class PaymentwayDialog extends ComponentDialog {
         switch (userInfo.p_shipway) {
             case "宅配":
                 return await stepContext.beginDialog(HOMEDELIVERYPAYMENTWAY_PROMPT)
-            case "7-11取貨":
+            case "7-11":
                 return await stepContext.beginDialog(SEVENELEVENDELIVERYPAYMENTWAY_PROMPT)
+            case "全家":
+                return await stepContext.beginDialog(HOMEFAMILYDELIVERYPAYMENTWAY_PROMPT)
             default:
                 return await stepContext.beginDialog(PAYMENTWAY_PROMPT)
         }
