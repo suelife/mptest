@@ -49,7 +49,7 @@ class PaymentDialog extends ComponentDialog {
         }
         console.log("userInfo.o : ", userInfo.o)
         switch (userInfo.o) {
-            case "確定付款":
+            case "確認付款":
                 userInfo.o = undefined
                 return await stepContext.beginDialog(CONFIRMPAYMENT_PROMPT)
             case "修改訂單內容":
