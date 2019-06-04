@@ -34,8 +34,8 @@ class ConfirmPaymentDialog extends ComponentDialog {
             }
         })
         if (success) {
-            // userInfo.sun = success
-            await stepContext.context.sendActivity(`post MP回傳結果 : ${success}`)
+            userInfo.sun = success
+            // await stepContext.context.sendActivity(`post MP回傳結果 : ${JSON.parse(success).data}`)
             await stepContext.context.sendActivities([
                 { type: 'typing' },
                 { type: 'delay', value: 1000 }
@@ -55,20 +55,21 @@ class ConfirmPaymentDialog extends ComponentDialog {
         console.log("userInfo.u_to : ", userInfo.u_to)
         console.log("userInfo.u_from : ", userInfo.u_from)
         console.log("userInfo.u_cid : ", userInfo.u_cid)
-        // await stepContext.context.sendActivity("點擊按鈕，您將前往付款畫面。")
-        // var gosuntechCard = CardFactory.adaptiveCard({
-        //     "type": "AdaptiveCard",
-        //     "actions": [
-        //         {
-        //             "type": "Action.OpenUrl",
-        //             "title": "前往付款畫面",
-        //             "url": "http://localhost:3978/api/tosuntech"
-        //         }
-        //     ],
-        //     "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-        //     "version": "1.0"
-        // })
-        // await stepContext.context.sendActivity({ attachments: [gosuntechCard] })
+        console.log("userInfo.sun : ", userInfo.sun)
+        await stepContext.context.sendActivity("點擊按鈕，您將前往付款畫面。")
+        var gosuntechCard = CardFactory.adaptiveCard({
+            "type": "AdaptiveCard",
+            "actions": [
+                {
+                    "type": "Action.OpenUrl",
+                    "title": "前往付款畫面",
+                    "url": "http://localhost:3978/api/tosuntech"
+                }
+            ],
+            "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+            "version": "1.0"
+        })
+        await stepContext.context.sendActivity({ attachments: [gosuntechCard] })
         // await stepContext.context.sendActivity(`顯示2: ${JSON.parse(userInfo.sun).data}`)
         return await stepContext.endDialog()
     }

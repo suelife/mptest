@@ -50,9 +50,9 @@ var storage = new CosmosDbStorage({
     databaseId: process.env.DATABASE,
     collectionId: process.env.COLLECTION
 })
-// const memoryStorage = new MemoryStorage()
-conversationState = new ConversationState(storage)
-userState = new UserState(storage)
+const memoryStorage = new MemoryStorage()
+conversationState = new ConversationState(memoryStorage)
+userState = new UserState(memoryStorage)
 
 
 // Create the main dialog.
@@ -159,7 +159,9 @@ server.use(restify.plugins.bodyParser({ mapParams: true }));
 // });
 
 server.get('/api/tosuntech', async (req, res) => {
+    console.log("userState.storage.memory : ", JSON.parse(Object.values(userState.storage.memory)[1]))
     var suntech = JSON.parse(Object.values(userState.storage.memory)[1]).userinfoproperty.sun
+    console.log("suntech : ", suntech)
     res.header('Content-Length');
     res.charSet('utf-8');
     res.write('<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>Document</title></head><body>' + JSON.parse(suntech).data + '</body></html>')
