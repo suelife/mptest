@@ -40,8 +40,8 @@ class OrderlistDialog extends ComponentDialog {
         let p_shipway_addr = ""
         if (userInfo.p_shipway == "宅配") {
             p_shipway_addr += userInfo.p_shipway_1_zip + " " + userInfo.p_shipway_1_2 + userInfo.p_shipway_1_3 + userInfo.p_shipway_1_4
-        } else if (userInfo.p_shipway == "7-11取貨") {
-            p_shipway_addr += userInfo.p_shipway_2_3 + " " + userInfo.p_shipway_2_4 
+        } else if (userInfo.p_shipway == "7-11" || userInfo.p_shipway == "全家") {
+            p_shipway_addr += "門市將在付款畫面做選擇"
         }
 
         var orderlist = CardFactory.adaptiveCard({
@@ -150,6 +150,10 @@ class OrderlistDialog extends ComponentDialog {
                                 {
                                     "title": "取貨方式:",
                                     "value": userInfo.p_shipway
+                                },
+                                {
+                                    "title": "取貨地點:",
+                                    "value": p_shipway_addr
                                 },
                                 {
                                     "title": "付款方式:",

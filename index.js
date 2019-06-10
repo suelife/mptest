@@ -5,7 +5,7 @@ const url = require("url");
 
 // Import required bot services.
 // See https://aka.ms/bot-services to learn more about the different parts of a bot.
-const { BotFrameworkAdapter, MemoryStorage, ConversationState, UserState , MessageFactory} = require('botbuilder');
+const { BotFrameworkAdapter, MemoryStorage, ConversationState, UserState, MessageFactory } = require('botbuilder');
 const { CosmosDbStorage } = require('botbuilder-azure')
 
 // This bot's main dialog.
@@ -44,15 +44,18 @@ adapter.onTurnError = async (context, error) => {
 // Create the Storage.
 const conversationReferences = {};
 let conversationState, userState
+
 var storage = new CosmosDbStorage({
-    serviceEndpoint: process.env.DB_SERVICE_ENDPOINT, 
-    authKey: process.env.AUTH_KEY, 
+    serviceEndpoint: process.env.DB_SERVICE_ENDPOINT,
+    authKey: process.env.AUTH_KEY,
     databaseId: process.env.DATABASE,
     collectionId: process.env.COLLECTION
 })
 const memoryStorage = new MemoryStorage()
-conversationState = new ConversationState(memoryStorage)
-userState = new UserState(memoryStorage)
+// conversationState = new ConversationState(memoryStorage)
+// userState = new UserState(memoryStorage)
+conversationState = new ConversationState(storage)
+userState = new UserState(storage)
 
 
 // Create the main dialog.
@@ -72,98 +75,79 @@ server.post('/api/messages', (req, res) => {
 
 server.use(restify.plugins.bodyParser({ mapParams: true }));
 
-// server.post('/api/notify', async (req, res) => {
-//     console.log("========================================================================")
-//     // console.log("req.headers : ", req.headers)
-//     console.log("req.body : ", req.body)
-    
-//     // console.log("req.params : ", req.params)
-//     console.log("========================================================================")
+server.post('/api/notify', async (req, res) => {
+    console.log("========================================================================")
+    // console.log("req.headers : ", req.headers)
+    console.log("req.body : ", req.body)
 
-//     var parsedUrl = url.parse(req.url, true);
-//     var from = parsedUrl.query.from;
-//     console.log("from : ", from)
-//     var to = parsedUrl.query.to;
-//     console.log("to : ", to)
-//     var conversationId = parsedUrl.query.conversationId;
-//     console.log("conversationId : ", conversationId)
-//     var id = parsedUrl.query.id;
-//     // JSON.parse(Object.values(userState.storage.memory)[1]).userinfoproperty.p_shipway_2_1 = req.body
-    
-//     for (let conversationReference of Object.values(conversationReferences)) {
-//         console.log("conversationReference :", conversationReference)
-//         if (conversationReference.conversation.id == conversationId) {
-//             conversationReference.data = req.body
-//             // console.log("conversationReference.data :", conversationReference.data)
-//             await adapter.continueConversation(conversationReference, async turnContext => {
-//                 console.log("mpBot: ", mpBot.userProfileAccessor.get(turnContext))
-//                 var store = conversationReference.data.storename + " " + conversationReference.data.storeaddress
-//                 const reply1 = MessageFactory.text('您選擇的門市資訊如下');
-//                 const reply2 = MessageFactory.text(store);
-//                 const chk = MessageFactory.suggestedActions(["是", "否"], "請問是否正確")
-//                 reply1.from = { id: to };
-//                 reply1.recipient = { id: from };
-//                 reply2.from = { id: to };
-//                 reply2.recipient = { id: from };
-//                 chk.from = { id: to };
-//                 chk.recipient = { id: from };
-//                 await turnContext.sendActivity(reply1);
-//                 await turnContext.sendActivity(reply2);
-//                 await turnContext.sendActivity(chk);
+    // console.log("req.params : ", req.params)
+    console.log("========================================================================")
 
-//             });
-//         }
-//     }
+    var parsedUrl = url.parse(req.url, true);
+    var from = parsedUrl.query.from;
+    console.log("from : ", from)
+    var to = parsedUrl.query.to;
+    console.log("to : ", to)
+    var conversationId = parsedUrl.query.conversationId;
+    console.log("conversationId : ", conversationId)
+    var id = parsedUrl.query.id;
+    // JSON.parse(Object.values(userState.storage.memory)[1]).userinfoproperty.p_shipway_2_1 = req.body
 
-//     res.write('<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>Document</title></head><body><h1>關閉此頁面</h1><script>window.opener = null;window.close();</script></body></html>');
-//     res.end()
-// });
+    for (let conversationReference of Object.values(conversationReferences)) {
+        console.log("conversationReference :", conversationReference)
+        if (conversationReference.conversation.id == conversationId) {
+            conversationReference.data = req.body
+            // console.log("conversationReference.data :", conversationReference.data)
+            await adapter.continueConversation(conversationReference, async turnContext => {
+                console.log("mpBot: ", mpBot.userProfileAccessor.get(turnContext))
+                var store = conversationReference.data.storename + " " + conversationReference.data.storeaddress
+                const reply1 = MessageFactory.text('您選擇的門市資訊如下');
+                const reply2 = MessageFactory.text(store);
+                const chk = MessageFactory.suggestedActions(["是", "否"], "請問是否正確")
+                reply1.from = { id: to };
+                reply1.recipient = { id: from };
+                reply2.from = { id: to };
+                reply2.recipient = { id: from };
+                chk.from = { id: to };
+                chk.recipient = { id: from };
+                await turnContext.sendActivity(reply1);
+                await turnContext.sendActivity(reply2);
+                await turnContext.sendActivity(chk);
 
-// server.get('/api/to7-11', async (req, res) => {
-//     console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-//     console.log("userState : ", userState)
-//     console.log("==============================================================================")
-//     console.log("Object.values(userState) : ", Object.values(userState))
-//     console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-//     var from = JSON.parse(Object.values(userState.storage.memory)[1]).userinfoproperty.u_from
-//     var to = JSON.parse(Object.values(userState.storage.memory)[1]).userinfoproperty.u_to
-//     var conversationId = JSON.parse(Object.values(userState.storage.memory)[1]).userinfoproperty.u_cid
-//     console.log("------------get--------------")
-//     // console.log("JSON.parse(Object.values(userState.storage.memory)[1]) : ", JSON.parse(Object.values(userState.storage.memory)[1]))
-//     console.log("from: ", from)
-//     console.log("to: ", to)
-//     console.log("conversationId: ", conversationId)
-//     console.log("------------get--------------")
-//     var endpoint = "http://localhost:3978/api/notify"
-//     var notifyUrl = endpoint + "?from=" + from + "&to=" + to + "&conversationId=" + conversationId + "&id=50"
-//     var formdata
-//     var formdata1 = '<html><body><form name="form1" action="http://emap.shopping7.com.tw/emap/c2cemap.ashx" method="POST">\
-//                     <div>\
-//                         <input type="hidden" name="eshopid" value="004" /><!-- 1.固定帶004-->\
-//                         <input type="hidden" name="showtype" value="1" />\
-//                         <!--2.固定帶1-->\
-//                         <input type="hidden" name="tempvar" value="" />\
-//                         <!--3.商家自行運用-->\
-//                         <input type="hidden" name="url"'
-//     var url = 'value = ' + notifyUrl + ' />'
-//     var formdata2 = '<input type="submit" name="button" id="button" value="選擇7-11門市" />\
-//                             </div>\
-//                             </form>\
-//                             <script type="text/javascript">form1.submit();\
-//                             </script></body></html>'
-//     formdata = formdata1 + url + formdata2
-//     res.header('Content-Length');
-//     res.charSet('utf-8');
-//     res.write(formdata)
-//     res.end()
-// });
+            });
+        }
+    }
+
+    res.write('<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>Document</title></head><body><h1>關閉此頁面</h1><script>window.opener = null;window.close();</script></body></html>');
+    res.end()
+});
 
 server.get('/api/tosuntech', async (req, res) => {
+    var parsedUrl = url.parse(req.url, true);
+    var cid = parsedUrl.query.cid;
+    var uid = parsedUrl.query.from;
+    console.log("cid : ", cid)
+    console.log("uid : ", uid)
+
+
+    // Read from the storage.
+    let storeItems = await storage.read([cid])
+    console.log("storeItems : ", storeItems)
+
+    var data
+
+    // Check the result.
+    if (typeof (storeItems[cid]) != 'undefined') {
+        // The log exists so we can write to it.
+        if (storeItems[cid].userId) {
+            data = storeItems[cid].Sun
+        }
+    }
+
+    // console.log("data : ", data)
     // console.log("userState.storage.memory : ", JSON.parse(Object.values(userState.storage.memory)[1]) = {})
-    var suntech = JSON.parse(Object.values(userState.storage.memory)[1]).userinfoproperty.sun
-    console.log("suntech : ", suntech)
-    res.header('Content-Length');
-    res.charSet('utf-8');
-    res.write('<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>Document</title></head><body>' + JSON.parse(suntech).data + '</body></html>')
+    // var suntech = JSON.parse(Object.values(userState.storage.memory)[1]).userinfoproperty.sun
+    // console.log("suntech : ", suntech)
+    res.write('<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>Document</title></head><body>' + data + '</body></html>')
     res.end()
 });

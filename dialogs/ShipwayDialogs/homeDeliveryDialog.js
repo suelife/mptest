@@ -12,7 +12,7 @@ var middle = ["苗栗縣", "臺中市", "彰化縣", "南投縣", "雲林縣"]
 var south = ["嘉義市", "嘉義縣", "臺南市", "高雄市", "屏東縣"]
 var east = ["臺東縣", "花蓮縣"]
 
-var Area = []
+var Area
 
 class HomeDeliveryDialog extends ComponentDialog {
     constructor(id, userProfileAccessor) {
@@ -144,11 +144,11 @@ class HomeDeliveryDialog extends ComponentDialog {
             userInfo.p_shipway_1_2 = undefined
             return await stepContext.beginDialog(HOMEDELIVERY_PROMPT)
         } else {
-
+            userInfo.p_shipway_1_2_1 = []
             TWzip.forEach(element => {
                 if (element.City == userInfo.p_shipway_1_2) {
-                    if (!Area.includes(element.Area)) {
-                        Area.push(element.Area)
+                    if (!userInfo.p_shipway_1_2_1.includes(element.Area)) {
+                        userInfo.p_shipway_1_2_1.push(element.Area)
                     }
                 }
             });
@@ -156,7 +156,7 @@ class HomeDeliveryDialog extends ComponentDialog {
                 CardFactory.heroCard(
                     "",
                     [],
-                    Area
+                    userInfo.p_shipway_1_2_1
                 )
             )
             
@@ -176,8 +176,8 @@ class HomeDeliveryDialog extends ComponentDialog {
             userInfo.p_shipway_1_3 = stepContext.result
         }
         console.log("鄉鎮市區: ", userInfo.p_shipway_1_3)
-        if (Area.includes(userInfo.p_shipway_1_3)) {
-            Area = []
+        if (userInfo.p_shipway_1_2_1.includes(userInfo.p_shipway_1_3)) {
+            userInfo.p_shipway_1_2_1 = []
 
             TWzip.forEach(element => {
                 if (element.City == userInfo.p_shipway_1_2 && element.Area == userInfo.p_shipway_1_3) {

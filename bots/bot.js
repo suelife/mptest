@@ -30,13 +30,6 @@ class MpBot extends ActivityHandler {
 
         // User coming to the bot
         this.onMembersAdded(async (turnContext, next) => {
-
-            // User 頻道 turnContext._activity.channelId
-            // User ID turnContext._activity.from.id
-            // console.log("turnContext._activity : ", turnContext._activity)
-            // await turnContext.sendActivity(`user_channelId: ${turnContext._activity.channelId}`)
-            // await turnContext.sendActivity(`user_id: ${turnContext._activity.from.id}`)
-
             const membersAdded = turnContext.activity.membersAdded
             for (let cnt = 0; cnt < membersAdded.length; cnt++) {
                 if (membersAdded[cnt].id !== turnContext.activity.recipient.id) {
@@ -51,7 +44,8 @@ class MpBot extends ActivityHandler {
             console.log("bot run start")
             await mainDialog.run(turnContext)
             console.log("bot run end")
-            await logMessageText(storage, this.dialogStateAccessor, this.userProfileAccessor, turnContext);
+            const userInfo = await this.userProfileAccessor.get(turnContext)
+            await logMessageText(storage, this.dialogStateAccessor, this.userProfileAccessor, turnContext, userInfo);
             await next();
 
         })
@@ -77,7 +71,7 @@ class MpBot extends ActivityHandler {
     }
 }
 
-async function logMessageText(storage, conversationData, userProfile, turnContext) {
+async function logMessageText(storage, conversationData, userProfile, turnContext, userInfo) {
     let utterance = turnContext.activity.text;
     console.log("===========================================")
     let botId = turnContext.activity.recipient.id;
@@ -88,6 +82,7 @@ async function logMessageText(storage, conversationData, userProfile, turnContex
     console.log("conversationId :", conversationId)
     console.log("conversationData: ", conversationData)
     console.log("userProfile: ", userProfile)
+    console.log("userInfo: ", userInfo)
     console.log("===========================================")
     console.log("User typing : ", utterance)
 
@@ -104,13 +99,19 @@ async function logMessageText(storage, conversationData, userProfile, turnContex
             // The log exists so we can write to it.
             if (storeItems[conversationId].userId == userId) {
                 storeItems[conversationId].turnNumber++;
-                if (!userProfile.name) {
+                if (!userInfo.c_name) {
                     storeItems[conversationId].UtteranceList.push(utterance);
                 } else {
-                    storeItems[conversationId].Name = userProfile.name;
-                    if (utterance != userProfile.name) {
+                    storeItems[conversationId].Name = userInfo.c_name;
+                    if (utterance != userInfo.c_name) {
                         storeItems[conversationId].UtteranceList.push(utterance);
                     }
+                }
+                console.log("=========logMessageText========")
+                console.log("userInfo.sun: ", userInfo.sun)
+                console.log("=========logMessageText========")
+                if (userInfo.sun) {
+                    storeItems[conversationId].Sun = userInfo.sun
                 }
 
                 // Gather info for user message.

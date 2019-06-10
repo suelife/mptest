@@ -5,7 +5,7 @@ class UserInfo {
         p_plan, p_price, p_combined,
         m,
         p_format, 
-        p_shipway, p_shipway_1_1, p_shipway_1_2, p_shipway_1_3, p_shipway_1_4, p_shipway_1_zip,
+        p_shipway, p_shipway_1_1, p_shipway_1_2, p_shipway_1_2_1, p_shipway_1_3, p_shipway_1_4, p_shipway_1_zip,
         p_shipway_2_1, p_shipway_2_2, p_shipway_2_3, p_shipway_2_4,
         c_name, c_phone, c_email,
         s_o,
@@ -30,6 +30,7 @@ class UserInfo {
         this.p_shipway = p_shipway || undefined;
         this.p_shipway_1_1 = p_shipway_1_1 || undefined;
         this.p_shipway_1_2 = p_shipway_1_2 || undefined;
+        this.p_shipway_1_2_1 = p_shipway_1_2_1 || undefined;
         this.p_shipway_1_3 = p_shipway_1_3 || undefined;
         this.p_shipway_1_4 = p_shipway_1_4 || undefined;
         this.p_shipway_1_zip = p_shipway_1_zip || undefined;

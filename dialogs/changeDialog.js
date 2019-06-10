@@ -119,6 +119,7 @@ class ChangeDialog extends ComponentDialog {
                 userInfo.p_shipway = undefined
                 userInfo.p_shipway_1_1 = undefined
                 userInfo.p_shipway_1_2 = undefined
+                userInfo.p_shipway_1_2_1 = undefined
                 userInfo.p_shipway_1_3 = undefined
                 userInfo.p_shipway_1_4 = undefined
                 userInfo.p_shipway_1_zip = undefined
