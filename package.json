@@ -18,7 +18,7 @@
     "dependencies": {
         "botbuilder": "^4.3.2",
         "botbuilder-ai": "^4.3.2",
-        "botbuilder-azure": "^4.3.4",
+        "botbuilder-azure": "^4.18.0",
         "botbuilder-dialogs": "^4.3.2",
         "botframework-config": "^4.2.0",
         "botframework-directlinejs": "^0.11.4",
